@@ -43,12 +43,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TalkingbotsweassessmentTheme {
-                var textToSpeech by remember { mutableStateOf<TextToSpeech?>(null) }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     
                 ) {
-                    RobotSpeakerApp(textToSpeech = textToSpeech)
+                    RobotSpeakerApp()
                 }
             }
         }
@@ -56,11 +55,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RobotSpeakerApp(
-    textToSpeech: TextToSpeech?,
-) {
+fun RobotSpeakerApp() {
     val context = LocalContext.current
-    //var textToSpeech by remember { mutableStateOf<TextToSpeech?>(null) }
+    var textToSpeech by remember { mutableStateOf<TextToSpeech?>(null) }
     var ttsInitialized by remember { mutableStateOf(false) }
     var statusMessage by remember { mutableStateOf("Initializing TTS...") }
     var isSpeaking by remember { mutableStateOf(false) }
@@ -68,7 +65,7 @@ fun RobotSpeakerApp(
     val imageResId = R.drawable.robot_image
 
     // Initialize TTS once and clean up on dispose
-    /*DisposableEffect(Unit) {
+    DisposableEffect(Unit) {
         var tts: TextToSpeech? = null
 
         tts = TextToSpeech(context.applicationContext) { status ->
@@ -153,7 +150,7 @@ fun RobotSpeakerApp(
             textToSpeech = null
             ttsInitialized = false
         }
-    }*/
+    }
 
     Column(
         modifier = Modifier
@@ -175,9 +172,6 @@ fun RobotSpeakerApp(
             modifier = Modifier
                 .size(200.dp)
                 .clickable {
-                    Log.d("RobotApp", "Robot image clicked")
-                    Log.d("RobotApp", "TTS initialized: $ttsInitialized")
-                    Log.d("RobotApp", "TTS object: ${textToSpeech != null}")
 
                     if (ttsInitialized && textToSpeech != null && !isSpeaking) {
                         Log.i("RobotApp", "Attempting to speak: $robotPhrase")
@@ -252,7 +246,7 @@ fun RobotSpeakerApp(
 @Composable
 fun DefaultPreview() {
     TalkingbotsweassessmentTheme {
-        RobotSpeakerApp(textToSpeech = null)
+        RobotSpeakerApp()
         //itText("Blessing")
     }
 }
